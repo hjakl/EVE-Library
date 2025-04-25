@@ -1775,6 +1775,203 @@ void UploadTouchFirmware(const uint8_t *firmware, size_t length)
   wr8(REG_GPIOX_DIR + RAM_REG, (rd8(RAM_REG + REG_GPIOX_DIR) & 0xF7)); // Set Disp GPIO Direction
 }
 
+//NEW!!!!!!
+// Generate a flash image from a bitmap
+// dst - Destination address in flash memory
+// src - Source address in RAM_G
+// num - Number of pixels
+// format - Format of the bitmap
+// Returns command completion status
+uint8_t EVE_CMD_FLASHPROGRAM(uint32_t dst, uint32_t src, uint32_t num, uint32_t format)
+{
+  Send_CMD(CMD_FLASHPROGRAM);
+  Send_CMD(dst);
+  Send_CMD(src);
+  Send_CMD(num);
+  Send_CMD(format);
+  return 0;
+}
+
+//NEW!!!!!!
+// Fast flash read
+// dest - Destination address in main memory
+// src - Source address in flash memory
+// num - Number of bytes to read
+// type - Data type
+// Returns command completion status
+uint8_t EVE_CMD_FLASHFASTREAD(uint32_t dest, uint32_t src, uint32_t num, uint32_t type)
+{
+  Send_CMD(CMD_FLASHFASTREAD);
+  Send_CMD(dest);
+  Send_CMD(src);
+  Send_CMD(num);
+  Send_CMD(type);
+  return 0;
+}
+
+//NEW!!!!!!
+// Deselect the flash device
+// Returns command completion status
+uint8_t EVE_CMD_FLASHSPIDESEL(void)
+{
+  Send_CMD(CMD_FLASHSPIDESEL);
+  return 0;
+}
+
+//NEW!!!!!!
+// Execute flash SPI transaction
+// num_bytes - Number of bytes to transfer
+// data - Data to send over SPI
+// Returns command completion status
+uint8_t EVE_CMD_FLASHSPITX(uint32_t num_bytes, uint32_t *data)
+{
+  uint16_t i;
+  
+  Send_CMD(CMD_FLASHSPITX);
+  Send_CMD(num_bytes);
+  
+  for (i = 0; i < num_bytes; i += 4)
+  {
+    Send_CMD(data[i/4]);
+  }
+  
+  return 0;
+}
+
+//NEW!!!!!!
+// Generate a mask from a bitmap
+// dst - Address of image to be masked
+// src - Source address of mask bitmap
+// fmt - Format of the mask bitmap
+// filter - Operation to perform
+// Returns command completion status
+uint8_t EVE_CMD_MASKIMAGE(uint32_t dst, uint32_t src, uint32_t fmt, uint32_t filter)
+{
+  Send_CMD(CMD_MASKIMAGE);
+  Send_CMD(dst);
+  Send_CMD(src);
+  Send_CMD(fmt);
+  Send_CMD(filter);
+  return 0;
+}
+
+//NEW!!!!!!
+// Set the font bitmap format with custom metrics
+// font - Font handle
+// fmt - Format of the font
+// ptr - Pointer to font metrics data
+// firstchar - First character in font
+// Returns command completion status
+uint8_t EVE_CMD_SETFONTFMT(uint32_t font, uint32_t fmt, uint32_t ptr, uint32_t firstchar)
+{
+  Send_CMD(CMD_SETFONTFMT);
+  Send_CMD(font);
+  Send_CMD(fmt);
+  Send_CMD(ptr);
+  Send_CMD(firstchar);
+  return 0;
+}
+
+//NEW!!!!!!
+// Set palette entry
+// index - Color index
+// rgba - RGBA value
+// Returns command completion status
+uint8_t EVE_CMD_PALETTEENTRY(uint32_t index, uint32_t rgba)
+{
+  Send_CMD(CMD_PALETTEENTRY);
+  Send_CMD(index);
+  Send_CMD(rgba);
+  return 0;
+}
+
+//NEW!!!!!!
+// Play video data
+// options - Video playback options
+// ptr - Pointer to video data
+// Returns command completion status
+uint8_t EVE_CMD_PLAYVIDEO(uint32_t options, uint32_t ptr)
+{
+  Send_CMD(CMD_PLAYVIDEO);
+  Send_CMD(options);
+  Send_CMD(ptr);
+  return 0;
+}
+
+//NEW!!!!!!
+// Set video frame pointer
+// dst - Destination for frame data
+// ptr - Pointer to video frame
+// Returns command completion status
+uint8_t EVE_CMD_VIDEOFRAME(uint32_t dst, uint32_t ptr)
+{
+  Send_CMD(CMD_VIDEOFRAME);
+  Send_CMD(dst);
+  Send_CMD(ptr);
+  return 0;
+}
+
+//NEW!!!!!!
+// Start video playback
+// Returns command completion status
+uint8_t EVE_CMD_VIDEOSTART(void)
+{
+  Send_CMD(CMD_VIDEOSTART);
+  return 0;
+}
+
+//NEW!!!!!!
+// Set video playback start time
+// Returns command completion status
+uint8_t EVE_CMD_VIDEOSTARTF(void)
+{
+  Send_CMD(CMD_VIDEOSTARTF);
+  return 0;
+}
+
+//NEW!!!!!!
+// Rotate the bitmap around a specified pivot point
+// x - X-coordinate of the pivot
+// y - Y-coordinate of the pivot
+// a - Angle of rotation in units of 1/65536 of a circle
+// s - Scale factor in units of 1/65536
+// Returns command completion status
+uint8_t EVE_CMD_ROTATEAROUND(int32_t x, int32_t y, int32_t a, int32_t s)
+{
+  Send_CMD(CMD_ROTATEAROUND);
+  Send_CMD(x);
+  Send_CMD(y);
+  Send_CMD(a);
+  Send_CMD(s);
+  return 0;
+}
+
+//NEW!!!!!!
+// Configure touch ADC mode
+// mode - ADC mode to use
+// Returns command completion status
+uint8_t EVE_CMD_TOUCH_SETADCMODE(uint8_t mode)
+{
+  Send_CMD(CMD_TOUCH_SETADCMODE);
+  Send_CMD(mode);
+  return 0;
+}
+
+//NEW!!!!!!
+// Configure capacitive touch engine
+// x - X scale factor
+// y - Y scale factor
+// transform - Transform of the touch screen
+// Returns command completion status
+uint8_t EVE_CMD_TOUCH_TRANSFORM(int32_t x, int32_t y, int32_t transform)
+{
+  Send_CMD(CMD_TOUCH_TRANSFORM);
+  Send_CMD(x);
+  Send_CMD(y);
+  Send_CMD(transform);
+  return 0;
+}
+
 #if defined(EVE_MO_INTERNAL_BUILD)
 void EVE_SPI_Enable(void)
 {
