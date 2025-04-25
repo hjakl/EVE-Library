@@ -121,6 +121,16 @@ extern "C"
 #define CMD_FLASHAPPENDF 0xFFFFFF59
 #define CMD_VIDEOSTARTF 0xFFFFFF5F
 
+//NEW!!!!!!
+// Additional BT815/BT816 specific commands
+#define CMD_FLASHPROGRAM       0xFFFFFF23UL
+#define CMD_ROTATEAROUND       0xFFFFFF51UL
+#define CMD_MASKIMAGE          0xFFFFFF90UL
+#define CMD_SETFONTFMT         0xFFFFFF8DUL
+#define CMD_PALETTEENTRY       0xFFFFFF91UL
+#define CMD_TOUCH_SETADCMODE   0xFFFFFF58UL
+#define CMD_TOUCH_TRANSFORM    0xFFFFFF20UL
+
 #define DLSWAP_FRAME 2UL
 
 #define OPT_CENTER 1536UL
@@ -488,7 +498,6 @@ extern "C"
   void EVE_EXPORT Cmd_Scale(uint32_t sx, uint32_t sy);
   void EVE_EXPORT Cmd_Calibrate(uint32_t result);
   void EVE_EXPORT Cmd_Flash_Fast(void);
-
   void EVE_EXPORT Cmd_AnimStart(int32_t ch, uint32_t aoptr, uint32_t loop);
   void EVE_EXPORT Cmd_AnimStop(int32_t ch);
   void EVE_EXPORT Cmd_AnimXY(int32_t ch, int16_t x, int16_t y);
@@ -520,6 +529,35 @@ extern "C"
   bool EVE_EXPORT FlashErase(void);
   /* Touch firmware commands */
   void UploadTouchFirmware(const uint8_t *firmware, size_t length);
+
+//NEW!!!!!!
+// BT815/BT816 specific flash and memory commands
+uint8_t EVE_EXPORT EVE_CMD_FLASHPROGRAM(uint32_t dst, uint32_t src, uint32_t num, uint32_t format);
+uint8_t EVE_EXPORT EVE_CMD_FLASHFASTREAD(uint32_t dest, uint32_t src, uint32_t num, uint32_t type);
+uint8_t EVE_EXPORT EVE_CMD_FLASHSPIDESEL(void);
+uint8_t EVE_EXPORT EVE_CMD_FLASHSPITX(uint32_t num_bytes, uint32_t *data);
+
+//NEW!!!!!!
+// BT815/BT816 specific image and font commands
+uint8_t EVE_EXPORT EVE_CMD_MASKIMAGE(uint32_t dst, uint32_t src, uint32_t fmt, uint32_t filter);
+uint8_t EVE_EXPORT EVE_CMD_SETFONTFMT(uint32_t font, uint32_t fmt, uint32_t ptr, uint32_t firstchar);
+uint8_t EVE_EXPORT EVE_CMD_PALETTEENTRY(uint32_t index, uint32_t rgba);
+
+//NEW!!!!!!
+// BT815/BT816 specific video commands
+uint8_t EVE_EXPORT EVE_CMD_PLAYVIDEO(uint32_t options, uint32_t ptr);
+uint8_t EVE_EXPORT EVE_CMD_VIDEOFRAME(uint32_t dst, uint32_t ptr);
+uint8_t EVE_EXPORT EVE_CMD_VIDEOSTART(void);
+uint8_t EVE_EXPORT EVE_CMD_VIDEOSTARTF(void);
+
+//NEW!!!!!!
+// BT815/BT816 specific animation and transformation commands
+uint8_t EVE_EXPORT EVE_CMD_ROTATEAROUND(int32_t x, int32_t y, int32_t a, int32_t s);
+
+//NEW!!!!!!
+// BT815/BT816 specific touch commands
+uint8_t EVE_EXPORT EVE_CMD_TOUCH_SETADCMODE(uint8_t mode);
+uint8_t EVE_EXPORT EVE_CMD_TOUCH_TRANSFORM(int32_t x, int32_t y, int32_t transform);
 
 #if defined(EVE_MO_INTERNAL_BUILD)
   void EVE_EXPORT EVE_SPI_Enable(void);
